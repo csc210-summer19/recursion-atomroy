@@ -9,7 +9,7 @@
  *   void removeAll(E)
  *   void duplicateAll(E) 
  * 
- * @author Rick Mercer and Your Name
+ * @author Rick Mercer and Atom Mingle
  */
 public class LinkedList<E extends Comparable<E>> {
   // extends Comparable<E> means the type must be comparable to avoid CT errors
@@ -100,32 +100,80 @@ public class LinkedList<E extends Comparable<E>> {
 
   
   // Return a reference to the element at the given index.
-  // Precondition: 0 >= index < size 
+  // Precondition: 0 <= index < size 
   public E get(int index) {
-    // This public method requires a private helper method with first 
-    // as an argument. Here is an example with the helper immediately below
     return get(first, 0, index);
   }
 
   private E get(Node ref, int startIndex, int stopIndex) {
-    // TODO: Complete this method using recursion, no loop allowed.
-    return null;
+    if(startIndex == stopIndex) {
+    	return ref.data;
+    }
+    else {
+    	return get(ref.next, startIndex + 1, stopIndex);
+    }
   }
  
   
   // Complete method removeAll(E el) so all elements that 
   // equals el are removed from this LinkedList<E>. 
   public void removeAll(E el) {
-    // This public method requires a call to a private helper method
-    // with first as an argument. It must be recursive, no loop allowed.
+    if(first == null) {
+    	return;
+    }
+    removeAll(el, first, first);
+  }
+  
+  private void removeAll(E el, Node ref, Node prev) {
+	  if(ref.next == null) {
+		  return;
+	  }
+	  if(ref == prev && ref.data == el) { //if first element
+		  first = ref.next;
+		  ref = first;
+		  prev = first;
+		  n--;
+	  }
+	  else if(ref.data == el) { //if any other element
+		  prev.next = ref.next;
+		  ref = ref.next;
+		  n--;
+	  }
+	  else { //if ref.data is not el
+		  prev = ref;
+		  ref = ref.next;
+	  }
+	  removeAll(el, ref, prev);
   }
 
   // Duplicate el next to each occurrence of el in this list.
   public void duplicateAll(E el) {
-    // This public method requires a call to a private helper method
-    // with first as an argument. It must be recursive, no loop allowed.
+    if(first == null) {
+    	return;
+    }
+    duplicateAll(el, first);
   }
 
+  private void duplicateAll(E el, Node ref) {
+	  if(ref == null) {
+		  return;
+	  }
+	  if(ref.data == el && ref.next != null) {
+		  Node temp = new Node(ref.next.data, ref.next.next);
+		  ref.next = new Node(el, temp);
+		  ref = temp;
+		  n++;
+	  }
+	  else if(ref.data == el) {
+		  ref.next = new Node(el);
+		  n++;
+		  return;
+	  }
+	  else {
+		  ref = ref.next;
+	  }
+	  duplicateAll(el, ref);
+  }
 
 
 }
