@@ -71,12 +71,40 @@ public class ObstacleCourse {
    * col where the exit was found
    */
   private boolean findExit(int row, int col) {
-    // TODO: Complete this method
-    //
-    // Do not forget to set the instance variable foundRow and 
-    // foundCol in this method when the exit is found.
-    //
-    return !false;
+	  boolean out = false;
+	  if(course[row][col] == '+' || course[row][col] == '.') {
+		  return false;
+	  }
+	  if(row == course.length - 1 || row == 0 || 
+			  col == course[0].length - 1 || col == 0) {
+		  foundRow = row;
+		  foundCol = col;
+		  course[row][col] = 'O';
+		  return true;
+	  }
+	  if(course[row][col] == ' ') {
+		  course[row][col] = '.';
+		  if(!out) {
+			  out = findExit(row - 1, col);
+		  }
+		  if(!out) {
+			  out = findExit(row, col - 1);
+		  }
+		  if(!out) {
+			  out = findExit(row, col + 1);
+		  }
+		  if(!out) {
+			  out = findExit(row + 1, col);
+		  }
+		  if(out) {
+			  course[row][col] = 'O';
+		  }
+	  }
+	  if(!out) {
+		  foundRow = -1;
+		  foundCol = -1;
+	  }
+    return out;
   }
 
 }
